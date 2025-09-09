@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Página de Mensaje</title>
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--accent:#ef4444;--text:#f8fafc}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;background:linear-gradient(135deg,#071025 0%, #0b1020 100%);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));border-radius:12px;padding:28px;max-width:560px;width:100%;box-shadow:0 10px 30px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03);text-align:center}
+    h1{margin:0 0 12px;font-size:20px;letter-spacing:0.2px}
+    p.lead{margin:0 0 18px;color:rgba(248,250,252,0.75)}
+    button#showBtn{appearance:none;border:0;padding:12px 18px;border-radius:10px;background:var(--accent);color:white;font-weight:600;cursor:pointer;font-size:16px}
+    .message{margin-top:20px;min-height:56px;display:flex;align-items:center;justify-content:center;border-radius:10px;padding:12px 16px;background:rgba(255,255,255,0.02);backdrop-filter:blur(4px);transition:transform .25s ease,opacity .25s ease,filter .25s ease;opacity:0;transform:translateY(10px);filter:blur(2px)}
+    .message.show{opacity:1;transform:translateY(0);filter:blur(0)}
+    .insulto{font-size:20px;font-weight:700;color:var(--accent)}
+    .controls{display:flex;gap:10px;justify-content:center;margin-top:14px}
+    button.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:rgba(248,250,252,0.9);padding:8px 12px;border-radius:8px;cursor:pointer}
+    .note{margin-top:14px;font-size:12px;color:rgba(248,250,252,0.55)}
+  </style>
+</head>
+<body>
+  <div class="card" role="main">
+    <h1>Mensaje directo</h1>
+    <p class="lead">Presiona el botón para mostrar el mensaje.</p>
+
+    <div class="controls">
+      <button id="showBtn">Mostrar mensaje</button>
+      <button id="hideBtn" class="secondary">Ocultar</button>
+    </div>
+
+    <div id="message" class="message" aria-live="polite">
+      <span class="insulto" id="insultoText"></span>
+    </div>
+
+    <p class="note">Hecho rápido. Si quieres que el texto sea diferente, o que se muestre con efectos distintos, dime cómo.</p>
+  </div>
+
+  <script>
+    const showBtn = document.getElementById('showBtn');
+    const hideBtn = document.getElementById('hideBtn');
+    const message = document.getElementById('message');
+    const insultoText = document.getElementById('insultoText');
+
+    const INSULTO = '¡Sapa hijueputa! <3';
+
+    showBtn.addEventListener('click', () => {
+      // Escribe el texto con efecto "typewriter" opcional
+      insultoText.textContent = '';
+      message.classList.add('show');
+      const chars = INSULTO.split('');
+      let i = 0;
+      const interval = setInterval(() => {
+        insultoText.textContent += chars[i++] || '';
+        if(i >= chars.length) clearInterval(interval);
+      }, 35);
+    });
+
+    hideBtn.addEventListener('click', () => {
+      message.classList.remove('show');
+      insultoText.textContent = '';
+    });
+
+    // También permitir mostrar/ocultar con la tecla Enter cuando el botón está enfocado
+    showBtn.addEventListener('keyup', (e) => { if(e.key === 'Enter') showBtn.click(); });
+    hideBtn.addEventListener('keyup', (e) => { if(e.key === 'Enter') hideBtn.click(); });
+  </script>
+</body>
+</html>
